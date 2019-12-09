@@ -197,10 +197,10 @@ public final class QueryUtils {
 
                 // Create a new {@link Earthquake} object with the magnitude, location, time,
                 // and url from the JSON response.
-                AnimeInfo animeInfo = new AnimeInfo();
+                //AnimeInfo animeInfo = new AnimeInfo();
 
                 // Add the new {@link Earthquake} to the list of earthquakes.
-                animeList.add(animeInfo);
+                //animeList.add(animeInfo);
             }
 
         } catch (JSONException e) {

@@ -5,19 +5,24 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.AnimeListFragment">
+    tools:context=".ui.main.AnimeInfoFragment">
 
     <ProgressBar
         android:id="@+id/progress_circular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        />
+        android:visibility="invisible" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/anime_list"
+        android:name="com.example.animelist.ui.main.AnimeInfoFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="AnimeListFragment" />
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        app:layoutManager="LinearLayoutManager"
+        tools:context=".ui.main.AnimeInfoFragment"
+        tools:listitem="@layout/fragment_animeinfo" />
 
 </FrameLayout>

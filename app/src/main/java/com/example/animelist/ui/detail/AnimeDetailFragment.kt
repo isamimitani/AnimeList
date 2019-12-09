@@ -11,7 +11,10 @@ import com.example.animelist.ui.AnimeViewModel
 
 class AnimeDetailFragment : Fragment() {
 
+    val TAG = "AnimeDetailFragment"
+
     companion object {
+        val TAG = AnimeDetailFragment::class.simpleName
         fun newInstance() = AnimeDetailFragment()
     }
 
@@ -21,7 +24,7 @@ class AnimeDetailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.anime_list_fragment, container, false)
+        return inflater.inflate(R.layout.anime_detail_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

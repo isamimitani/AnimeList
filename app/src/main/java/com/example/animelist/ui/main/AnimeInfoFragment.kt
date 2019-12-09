@@ -10,16 +10,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import com.example.animelist.MyApplication
 import com.example.animelist.R
 import com.example.animelist.entity.AnimeInfo
 import com.example.animelist.ui.AnimeViewModel
-import com.example.animelist.ui.detail.AnimeDetailFragment
 
 import com.example.animelist.ui.main.dummy.DummyContent
 import com.example.animelist.ui.main.dummy.DummyContent.DummyItem
 import kotlinx.android.synthetic.main.fragment_animeinfo_list.*
 import kotlinx.android.synthetic.main.fragment_animeinfo_list.view.*
+import javax.inject.Inject
 
 /**
  * A fragment representing a list of Items.
@@ -28,7 +28,8 @@ import kotlinx.android.synthetic.main.fragment_animeinfo_list.view.*
  */
 class AnimeInfoFragment : Fragment() {
 
-    private lateinit var viewModel: AnimeViewModel
+    @Inject
+    lateinit var viewModel: AnimeViewModel
 
     // TODO: Customize parameters
     private var columnCount = 1
@@ -37,6 +38,10 @@ class AnimeInfoFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
+        // Make Dagger instantiate @Inject fields in AnimeInfoFragment
+        (context.applicationContext as MyApplication).appComponent.inject(this)
+
         if (context is OnListFragmentInteractionListener) {
             listener = context
         } else {
@@ -77,10 +82,9 @@ class AnimeInfoFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(AnimeViewModel::class.java)
-        // TODO: Use the ViewModel
-        viewModel.getAnimeList().observe(requireActivity(), Observer<List<AnimeInfo>>{ animes ->
-            if(animes.isNotEmpty()){
+
+        viewModel.getAnimeList().observe(requireActivity(), Observer<List<AnimeInfo>> { animes ->
+            if (animes.isNotEmpty()) {
                 anime_list.adapter = MyAnimeInfoRecyclerViewAdapter(DummyContent.ITEMS, listener)
             }
         })

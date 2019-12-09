@@ -1,13 +1,15 @@
 package com.example.animelist.ui.detail
 
-import androidx.lifecycle.ViewModelProviders
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.animelist.MyApplication
 import com.example.animelist.R
 import com.example.animelist.ui.AnimeViewModel
+import javax.inject.Inject
 
 class AnimeDetailFragment : Fragment() {
 
@@ -18,7 +20,14 @@ class AnimeDetailFragment : Fragment() {
         fun newInstance() = AnimeDetailFragment()
     }
 
-    private lateinit var viewModel: AnimeViewModel
+    @Inject
+    lateinit var viewModel: AnimeViewModel
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        // Make Dagger instantiate @Inject fields in MainActivity
+        (context.applicationContext as MyApplication).appComponent.inject(this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,7 +38,6 @@ class AnimeDetailFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(AnimeViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

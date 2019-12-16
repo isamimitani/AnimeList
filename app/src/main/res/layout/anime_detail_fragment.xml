@@ -1,20 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.detail.AnimeDetailFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="AnimeDetailFragment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <variable
+            name="viewmodel"
+            type="com.example.animelist.ui.AnimeViewModel" />
+
+        <variable
+            name="fragment"
+            type="com.example.animelist.ui.detail.AnimeDetailFragment" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="vertical"
+            tools:context=".ui.detail.AnimeDetailFragment">
+
+            <ImageView
+                android:id="@+id/anime_image"
+                android:layout_width="224dp"
+                android:layout_height="224dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                tools:src="@drawable/ic_launcher_foreground" />
+
+            <TextView
+                android:id="@+id/anime_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="@{viewmodel.id}"
+                tools:text="id" />
+
+            <TextView
+                android:id="@+id/anime_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/roboto"
+                android:text="@{viewmodel.name}"
+                tools:text="name" />
+
+            <TextView
+                android:id="@+id/anime_japanese_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="@{viewmodel.japaneseTitle}"
+                tools:text="japanese title" />
+
+            <TextView
+                android:id="@+id/anime_opening_theme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="@{viewmodel.openingTheme}"
+                tools:text="opening theme" />
+
+            <TextView
+                android:id="@+id/anime_ending_theme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="@{viewmodel.endingTheme}"
+                tools:text="ending theme" />
+
+            <TextView
+                android:id="@+id/anime_plot_summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="@{viewmodel.plotSummary}"
+                tools:text="plot summary" />
+
+            <TextView
+                android:id="@+id/anime_vintage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="@{viewmodel.vintage}"
+                tools:text="vintage" />
+
+            <TextView
+                android:id="@+id/anime_number_of_episodes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:text="@{viewmodel.numberOfEpisodes}"
+                tools:text="number of episodes" />
+
+            <TextView
+                android:id="@+id/anime_official_website"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:onClick="@{(v) -> fragment.openUrl(v)}"
+                android:singleLine="false"
+                android:text="@{viewmodel.officialWebsite}"
+                android:textColor="@android:color/holo_blue_dark"
+                tools:text="official website" />
+
+        </LinearLayout>
+
+    </ScrollView>
+</layout>

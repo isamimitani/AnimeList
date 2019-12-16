@@ -15,8 +15,6 @@ import com.example.animelist.R
 import com.example.animelist.entity.AnimeInfo
 import com.example.animelist.ui.AnimeViewModel
 
-import com.example.animelist.ui.main.dummy.DummyContent
-import com.example.animelist.ui.main.dummy.DummyContent.DummyItem
 import kotlinx.android.synthetic.main.fragment_animeinfo_list.*
 import kotlinx.android.synthetic.main.fragment_animeinfo_list.view.*
 import javax.inject.Inject
@@ -28,12 +26,26 @@ import javax.inject.Inject
  */
 class AnimeInfoFragment : Fragment() {
 
+    companion object {
+        @JvmField
+        val TAG = AnimeInfoFragment::class.simpleName
+        const val ARG_COLUMN_COUNT = "column-count"
+
+        @JvmStatic
+        fun newInstance(columnCount: Int) =
+            AnimeInfoFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARG_COLUMN_COUNT, columnCount)
+                }
+            }
+    }
+
     @Inject
     lateinit var viewModel: AnimeViewModel
 
-    // TODO: Customize parameters
     private var columnCount = 1
 
+    private lateinit var mAdapter : MyAnimeInfoRecyclerViewAdapter
     private var listener: OnListFragmentInteractionListener? = null
 
     override fun onAttach(context: Context) {
@@ -53,7 +65,7 @@ class AnimeInfoFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
+            columnCount = it.getInt(ARG_COLUMN_COUNT, 1)
         }
     }
 
@@ -70,22 +82,22 @@ class AnimeInfoFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = MyAnimeInfoRecyclerViewAdapter(DummyContent.ITEMS, listener)
+                mAdapter = MyAnimeInfoRecyclerViewAdapter(listOf(), listener)
+                adapter = mAdapter
+//                adapter = MyAnimeInfoRecyclerViewAdapter(listOf(), listener)
             }
         }
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.getAnimeList().observe(requireActivity(), Observer<List<AnimeInfo>> { animes ->
+        viewModel.getAnimeListLiveData().observe(viewLifecycleOwner, Observer<List<AnimeInfo>> { animes ->
             if (animes.isNotEmpty()) {
-                anime_list.adapter = MyAnimeInfoRecyclerViewAdapter(DummyContent.ITEMS, listener)
+                //anime_list.adapter = MyAnimeInfoRecyclerViewAdapter(animes, listener)
+                mAdapter.setNewData(animes)
+                progress_circular.visibility = View.INVISIBLE
             }
         })
     }
@@ -107,23 +119,7 @@ class AnimeInfoFragment : Fragment() {
      * for more information.
      */
     interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onListFragmentInteraction(item: DummyItem?)
+        fun onListFragmentInteraction(item: AnimeInfo?)
     }
 
-    companion object {
-
-        val TAG = AnimeInfoFragment::class.simpleName
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            AnimeInfoFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
-            }
-    }
 }

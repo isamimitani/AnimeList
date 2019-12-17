@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.example.animelist.MyApplication
 import com.example.animelist.R
+import com.example.animelist.databinding.FragmentAnimeinfoListBinding
 import com.example.animelist.entity.AnimeInfo
 import com.example.animelist.ui.AnimeViewModel
 
@@ -45,7 +47,9 @@ class AnimeInfoFragment : Fragment() {
 
     private var columnCount = 1
 
-    private lateinit var mAdapter : MyAnimeInfoRecyclerViewAdapter
+    private lateinit var fragmentAnimeInfoListBinding: FragmentAnimeinfoListBinding
+
+    private lateinit var mAdapter: MyAnimeInfoRecyclerViewAdapter
     private var listener: OnListFragmentInteractionListener? = null
 
     override fun onAttach(context: Context) {
@@ -73,7 +77,10 @@ class AnimeInfoFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_animeinfo_list, container, false)
+        fragmentAnimeInfoListBinding = DataBindingUtil
+            .inflate(inflater, R.layout.fragment_animeinfo_list, container, false)
+        val view = fragmentAnimeInfoListBinding.root
+        fragmentAnimeInfoListBinding.viewmodel = viewModel
 
         // Set the adapter
         if (view.anime_list is RecyclerView) {
@@ -84,7 +91,6 @@ class AnimeInfoFragment : Fragment() {
                 }
                 mAdapter = MyAnimeInfoRecyclerViewAdapter(listOf(), listener)
                 adapter = mAdapter
-//                adapter = MyAnimeInfoRecyclerViewAdapter(listOf(), listener)
             }
         }
         return view
@@ -93,13 +99,13 @@ class AnimeInfoFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.getAnimeListLiveData().observe(viewLifecycleOwner, Observer<List<AnimeInfo>> { animes ->
-            if (animes.isNotEmpty()) {
-                //anime_list.adapter = MyAnimeInfoRecyclerViewAdapter(animes, listener)
-                mAdapter.setNewData(animes)
-                progress_circular.visibility = View.INVISIBLE
-            }
-        })
+        viewModel.animeListLiveData
+            .observe(viewLifecycleOwner, Observer<List<AnimeInfo>> { animes ->
+                if (animes.isNotEmpty()) {
+                    mAdapter.setNewData(animes)
+                    progress_circular.visibility = View.INVISIBLE
+                }
+            })
     }
 
     override fun onDetach() {

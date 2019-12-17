@@ -1,6 +1,8 @@
 package com.example.animelist.ui
 
 import android.os.AsyncTask
+import android.view.View
+import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -22,17 +24,21 @@ class AnimeViewModel @Inject constructor() : ViewModel() {
         const val ANIME_DETAIL_URL = "https://cdn.animenewsnetwork.com/encyclopedia/api.xml?anime="
     }
 
-    private val animeListLiveData: MutableLiveData<List<AnimeInfo>> by lazy {
+    private val _animeListLiveData: MutableLiveData<List<AnimeInfo>> by lazy {
         MutableLiveData<List<AnimeInfo>>().also {
             loadAnimeList()
         }
     }
+    val animeListLiveData : LiveData<List<AnimeInfo>>
+        get() = _animeListLiveData
 
     private var animeList: List<AnimeInfo>? = null
 
-    private val animeDetailLiveData: MutableLiveData<AnimeDetail> by lazy {
+    private val _animeDetailLiveData: MutableLiveData<AnimeDetail> by lazy {
         MutableLiveData<AnimeDetail>()
     }
+    val animeDetailLiveData : LiveData<AnimeDetail>
+        get() = _animeDetailLiveData
 
     // Transform AnimeDetail to LiveData to use them in data binding
     val id: LiveData<String> =
@@ -56,30 +62,26 @@ class AnimeViewModel @Inject constructor() : ViewModel() {
             animeDetail.officialWebSite?.joinToString("\r\n")
         }
 
-    fun getAnimeListLiveData(): LiveData<List<AnimeInfo>> {
-        return animeListLiveData
-    }
-
-    fun getAnimeDetailLiveData(): LiveData<AnimeDetail> {
-        return animeDetailLiveData
-    }
-
     // Do an asynchronous operation to fetch animeList
     private fun loadAnimeList() {
         AsyncTask.execute {
             animeList = QueryUtils.fetchAnimeListData(ANIME_LIST_URL)
-            animeListLiveData.postValue(animeList?.sortedBy { it.name })
+            _animeListLiveData.postValue(animeList?.sortedBy { it.name })
         }
     }
 
     // Do an asynchronous operation to fetch animeDetail
     fun loadAnimeDetail(animeId: String) {
         AsyncTask.execute {
-            animeDetailLiveData.postValue(QueryUtils.fetchAnimeDetailData(ANIME_DETAIL_URL + animeId))
+            _animeDetailLiveData.postValue(QueryUtils.fetchAnimeDetailData(ANIME_DETAIL_URL + animeId))
         }
     }
 
-    fun filterAnimeListByName(searchString: String) {
-        animeListLiveData.postValue(animeList?.filter { it.name?.contains(searchString) ?: false })
+    fun filterAnimeListByName(view: View) {
+        if(view is EditText && !view.text.equals("")) {
+            _animeListLiveData.postValue(animeList?.filter {
+                it.name?.contains(view.text, ignoreCase = true) ?: false
+            }?.sortedBy { it.name })
+        }
     }
 }

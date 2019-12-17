@@ -68,7 +68,7 @@ class AnimeDetailFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.getAnimeDetailLiveData()
+        viewModel.animeDetailLiveData
             .observe(viewLifecycleOwner, Observer<AnimeDetail> { animeDetail ->
                 updateImage(animeDetail)
             })

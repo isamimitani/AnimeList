@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">AnimeList</string>
     <string name="search">search</string>
+    <string name="id">ID:</string>
+    <string name="english_name">English Name:</string>
+    <string name="japanese_name">Japanese Name:</string>
+    <string name="opening_theme">Opening Theme:</string>
+    <string name="ending_theme">Ending Theme:</string>
+    <string name="vintage">Vintage:</string>
+    <string name="number_of_episodes">Number of episodes:</string>
+    <string name="official_website">Official Website:</string>
+    <string name="plot_summary">Plot Summary:</string>
 </resources>

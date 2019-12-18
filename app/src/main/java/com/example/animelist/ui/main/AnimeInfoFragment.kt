@@ -2,6 +2,8 @@ package com.example.animelist.ui.main
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -93,6 +95,17 @@ class AnimeInfoFragment : Fragment() {
                 adapter = mAdapter
             }
         }
+        fragmentAnimeInfoListBinding.editText.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                viewModel.filterAnimeListByName(fragmentAnimeInfoListBinding.editText)
+            }
+        })
         return view
     }
 

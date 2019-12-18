@@ -78,7 +78,7 @@ class AnimeViewModel @Inject constructor() : ViewModel() {
     }
 
     fun filterAnimeListByName(view: View) {
-        if(view is EditText && !view.text.equals("")) {
+        if(animeList != null && view is EditText && !view.text.equals("")) {
             _animeListLiveData.postValue(animeList?.filter {
                 it.name?.contains(view.text, ignoreCase = true) ?: false
             }?.sortedBy { it.name })

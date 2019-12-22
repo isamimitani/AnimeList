@@ -18,6 +18,7 @@ import com.example.animelist.R
 import com.example.animelist.databinding.FragmentAnimeinfoListBinding
 import com.example.animelist.entity.AnimeInfo
 import com.example.animelist.ui.AnimeViewModel
+import com.example.animelist.ui.detail.AnimeDetailFragment
 
 import kotlinx.android.synthetic.main.fragment_animeinfo_list.*
 import kotlinx.android.synthetic.main.fragment_animeinfo_list.view.*
@@ -52,19 +53,12 @@ class AnimeInfoFragment : Fragment() {
     private lateinit var fragmentAnimeInfoListBinding: FragmentAnimeinfoListBinding
 
     private lateinit var mAdapter: MyAnimeInfoRecyclerViewAdapter
-    private var listener: OnListFragmentInteractionListener? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         // Make Dagger instantiate @Inject fields in AnimeInfoFragment
         (context.applicationContext as MyApplication).appComponent.inject(this)
-
-        if (context is OnListFragmentInteractionListener) {
-            listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,11 +85,21 @@ class AnimeInfoFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                mAdapter = MyAnimeInfoRecyclerViewAdapter(listOf(), listener)
+                mAdapter = MyAnimeInfoRecyclerViewAdapter(
+                    listOf(),
+                    AnimeInfoListener { id -> viewModel.displayAnimeDetail(id) })
                 adapter = mAdapter
             }
         }
-        fragmentAnimeInfoListBinding.editText.addTextChangedListener(object : TextWatcher{
+
+        viewModel.navigateToSelectedAnimeDetail.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                showAnimeDetailFragment(it)
+                viewModel.displayAnimeDetailComplete()
+            }
+        })
+
+        fragmentAnimeInfoListBinding.editText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {
             }
 
@@ -121,24 +125,12 @@ class AnimeInfoFragment : Fragment() {
             })
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson
-     * [Communicating with Other Fragments](http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
-    interface OnListFragmentInteractionListener {
-        fun onListFragmentInteraction(item: AnimeInfo?)
+    fun showAnimeDetailFragment(animeId: String) {
+        val activity = requireNotNull(activity)
+        activity.supportFragmentManager.beginTransaction()
+            .replace(R.id.container, AnimeDetailFragment.newInstance(animeId))
+            .addToBackStack(null)
+            .commit()
     }
 
 }

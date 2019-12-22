@@ -4,20 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import com.bumptech.glide.Glide
+import androidx.fragment.app.Fragment
 import com.example.animelist.MyApplication
 import com.example.animelist.R
 import com.example.animelist.databinding.AnimeDetailFragmentBinding
-import com.example.animelist.entity.AnimeDetail
 import com.example.animelist.ui.AnimeViewModel
-import kotlinx.android.synthetic.main.anime_detail_fragment.*
 import javax.inject.Inject
 
 class AnimeDetailFragment : Fragment() {
@@ -64,22 +60,6 @@ class AnimeDetailFragment : Fragment() {
         animeDetailFragmentBinding.fragment = this
         animeDetailFragmentBinding.lifecycleOwner = this
         return animeDetailFragmentBinding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel.animeDetailLiveData
-            .observe(viewLifecycleOwner, Observer<AnimeDetail> { animeDetail ->
-                updateImage(animeDetail)
-            })
-        anime_id.text = animeId
-    }
-
-    private fun updateImage(animeDetail: AnimeDetail) {
-        Glide.with(this)
-            .load(Uri.parse(animeDetail.pictureUrl ?: ""))
-            .placeholder(R.drawable.ic_launcher_foreground)
-            .into(anime_image)
     }
 
     fun openUrl(view: View) {

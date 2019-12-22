@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="animeInfo"
+            type="com.example.animelist.entity.AnimeInfo" />
+        <variable
+            name="clickListener"
+            type="com.example.animelist.ui.main.AnimeInfoListener" />
+    </data>
+
+    <LinearLayout
+        android:id="@+id/parent_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/text_margin"
+        android:paddingLeft="@dimen/text_margin"
+        android:paddingEnd="@dimen/text_margin"
+        android:paddingRight="@dimen/text_margin"
+        android:onClick="@{(v) -> clickListener.onClick(animeInfo)}">
+
+        <TextView
+            android:id="@+id/anime_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="@dimen/text_margin"
+            android:layout_weight="1"
+            android:text="@{animeInfo.name}"
+            android:textAppearance="?attr/textAppearanceListItem" />
+
+        <TextView
+            android:id="@+id/anime_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/text_margin"
+            android:text="@{animeInfo.type}"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:textColor="#B4BAC0" />
+
+    </LinearLayout>
+</layout>

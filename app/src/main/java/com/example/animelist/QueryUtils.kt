@@ -26,16 +26,22 @@ import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 import java.nio.charset.Charset
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Helper methods related to requesting and receiving earthquake data from USGS.
  */
-object QueryUtils {
+@Singleton
+class QueryUtils @Inject constructor(){
 
-    private val LOG_TAG = QueryUtils::class.java.simpleName
+    companion object{
+        @JvmField
+        val LOG_TAG = QueryUtils::class.java.simpleName
 
-    // We don't use namespaces
-    private val ns: String? = null
+        // We don't use namespaces
+        private val ns: String? = null
+    }
 
     /**
      * Query the Anime News Network dataset and return a list of [AnimeInfo] objects.

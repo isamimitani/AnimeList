@@ -13,12 +13,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.example.animelist.MyApplication
 import com.example.animelist.R
 import com.example.animelist.databinding.FragmentAnimeinfoListBinding
 import com.example.animelist.entity.AnimeInfo
 import com.example.animelist.ui.AnimeViewModel
-import com.example.animelist.ui.detail.AnimeDetailFragment
 
 import kotlinx.android.synthetic.main.fragment_animeinfo_list.*
 import kotlinx.android.synthetic.main.fragment_animeinfo_list.view.*
@@ -35,14 +35,6 @@ class AnimeInfoFragment : Fragment() {
         @JvmField
         val TAG = AnimeInfoFragment::class.simpleName
         const val ARG_COLUMN_COUNT = "column-count"
-
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            AnimeInfoFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
-            }
     }
 
     @Inject
@@ -94,7 +86,9 @@ class AnimeInfoFragment : Fragment() {
 
         viewModel.navigateToSelectedAnimeDetail.observe(viewLifecycleOwner, Observer {
             if (it != null) {
-                showAnimeDetailFragment(it)
+                val action =
+                    AnimeInfoFragmentDirections.actionAnimeInfoFragmentToAnimeDetailFragment(it)
+                findNavController().navigate(action)
                 viewModel.displayAnimeDetailComplete()
             }
         })
@@ -123,14 +117,6 @@ class AnimeInfoFragment : Fragment() {
                     progress_circular.visibility = View.INVISIBLE
                 }
             })
-    }
-
-    fun showAnimeDetailFragment(animeId: String) {
-        val activity = requireNotNull(activity)
-        activity.supportFragmentManager.beginTransaction()
-            .replace(R.id.container, AnimeDetailFragment.newInstance(animeId))
-            .addToBackStack(null)
-            .commit()
     }
 
 }

@@ -21,18 +21,10 @@ class AnimeDetailFragment : Fragment() {
     companion object {
         @JvmField
         val TAG = AnimeDetailFragment::class.simpleName
-        const val ARG_ANIME_ID = "column-count"
-        fun newInstance(animeId: String) = AnimeDetailFragment().apply {
-            arguments = Bundle().apply {
-                putString(ARG_ANIME_ID, animeId)
-            }
-        }
     }
 
     @Inject
     lateinit var viewModel: AnimeViewModel
-
-    private lateinit var animeId: String
 
     private lateinit var animeDetailFragmentBinding: AnimeDetailFragmentBinding
 
@@ -44,10 +36,8 @@ class AnimeDetailFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            animeId = it.getString(ARG_ANIME_ID, "")
-        }
-        viewModel.loadAnimeDetail(animeId)
+        var args = AnimeDetailFragmentArgs.fromBundle(arguments!!)
+        viewModel.loadAnimeDetail(args.animeId)
     }
 
     override fun onCreateView(

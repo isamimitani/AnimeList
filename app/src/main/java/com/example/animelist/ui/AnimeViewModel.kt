@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import com.example.animelist.QueryUtils
 import com.example.animelist.entity.AnimeDetail
 import com.example.animelist.entity.AnimeInfo
+import com.example.animelist.network.Network
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -87,7 +88,8 @@ class AnimeViewModel @Inject constructor(private val queryUtils: QueryUtils) : V
     private fun loadAnimeList() {
         uiScope.launch {
             withContext(Dispatchers.IO) {
-                animeList = queryUtils.fetchAnimeListData(ANIME_LIST_URL)
+                val result = Network.animeService.getAnimeList()
+                val animeList = queryUtils.parseXmlToAnimeList(result)
                 _animeListLiveData.postValue(animeList?.sortedBy { it.name })
             }
         }
@@ -97,7 +99,9 @@ class AnimeViewModel @Inject constructor(private val queryUtils: QueryUtils) : V
     fun loadAnimeDetail(animeId: String) {
         uiScope.launch {
             withContext(Dispatchers.IO) {
-                _animeDetailLiveData.postValue(queryUtils.fetchAnimeDetailData(ANIME_DETAIL_URL + animeId))
+                val result = Network.animeService.getAnimeDetail(animeId)
+                val animeDetail = queryUtils.parseXmlToAnimeDetail(result)
+                _animeDetailLiveData.postValue(animeDetail)
             }
         }
     }

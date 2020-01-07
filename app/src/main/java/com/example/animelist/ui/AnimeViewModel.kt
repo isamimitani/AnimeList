@@ -1,7 +1,5 @@
 package com.example.animelist.ui
 
-import android.view.View
-import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
@@ -9,20 +7,21 @@ import androidx.lifecycle.ViewModel
 import com.example.animelist.QueryUtils
 import com.example.animelist.entity.AnimeDetail
 import com.example.animelist.entity.AnimeInfo
-import com.example.animelist.network.Network
+import com.example.animelist.network.AnimeNetworkService
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AnimeViewModel @Inject constructor(private val queryUtils: QueryUtils) : ViewModel() {
+class AnimeViewModel
+@Inject constructor(
+    private val queryUtils: QueryUtils,
+    private val animeNetworkService: AnimeNetworkService
+) : ViewModel() {
 
     companion object {
         @JvmField
         val TAG = AnimeViewModel::class.simpleName
-        const val ANIME_LIST_URL =
-            "https://www.animenewsnetwork.com/encyclopedia/reports.xml?id=155&type=anime&nlist=all"
-        const val ANIME_DETAIL_URL = "https://cdn.animenewsnetwork.com/encyclopedia/api.xml?anime="
     }
 
     private var viewModelJob = Job()
@@ -51,7 +50,7 @@ class AnimeViewModel @Inject constructor(private val queryUtils: QueryUtils) : V
         get() = _animeDetailLiveData
 
     private val _navigateToSelectedAnimeDetail = MutableLiveData<String>()
-    val navigateToSelectedAnimeDetail : LiveData<String>
+    val navigateToSelectedAnimeDetail: LiveData<String>
         get() = _navigateToSelectedAnimeDetail
 
     // Transform AnimeDetail to LiveData to use them in data binding
@@ -88,8 +87,8 @@ class AnimeViewModel @Inject constructor(private val queryUtils: QueryUtils) : V
     private fun loadAnimeList() {
         uiScope.launch {
             withContext(Dispatchers.IO) {
-                val result = Network.animeService.getAnimeList()
-                val animeList = queryUtils.parseXmlToAnimeList(result)
+                val result = animeNetworkService.fetchAnimeList()
+                animeList = queryUtils.parseXmlToAnimeList(result)
                 _animeListLiveData.postValue(animeList?.sortedBy { it.name })
             }
         }
@@ -99,17 +98,17 @@ class AnimeViewModel @Inject constructor(private val queryUtils: QueryUtils) : V
     fun loadAnimeDetail(animeId: String) {
         uiScope.launch {
             withContext(Dispatchers.IO) {
-                val result = Network.animeService.getAnimeDetail(animeId)
+                val result = animeNetworkService.fetchAnimeDetail(animeId)
                 val animeDetail = queryUtils.parseXmlToAnimeDetail(result)
                 _animeDetailLiveData.postValue(animeDetail)
             }
         }
     }
 
-    fun filterAnimeListByName(view: View) {
-        if (animeList != null && view is EditText && !view.text.equals("")) {
+    fun filterAnimeListByName(text: String) {
+        if (animeList != null && text != "") {
             _animeListLiveData.postValue(animeList?.filter {
-                it.name?.contains(view.text, ignoreCase = true) ?: false
+                it.name?.contains(text, ignoreCase = true) ?: false
             }?.sortedBy { it.name })
         }
     }

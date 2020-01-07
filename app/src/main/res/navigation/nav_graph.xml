@@ -22,5 +22,8 @@
         <argument
             android:name="animeId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_animeDetailFragment_to_animeInfoFragment"
+            app:destination="@id/animeInfoFragment" />
     </fragment>
 </navigation>

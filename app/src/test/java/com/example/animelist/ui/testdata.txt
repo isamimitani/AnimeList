@@ -1,0 +1,23 @@
+<report>
+<args>
+<type>anime</type>
+<name/>
+<search/>
+</args>
+<item>
+<id>22961</id>
+<gid>1454700421</gid>
+<type>ONA</type>
+<name>Mobile Suit Gundam G40</name>
+<precision>ONA</precision>
+<vintage>2020-01-01</vintage>
+</item>
+<item>
+<id>22960</id>
+<gid>576855416</gid>
+<type>movie</type>
+<name>Mobile Suit Gundam Hathaway</name>
+<precision>movie</precision>
+<vintage>2020-07-23</vintage>
+</item>
+</report>

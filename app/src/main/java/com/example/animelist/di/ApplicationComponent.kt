@@ -6,7 +6,7 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component
+@Component(modules = [NetworkModule::class])
 interface ApplicationComponent {
     // This tells Dagger that declared classes requests injection so the graph needs to
     // satisfy all the dependencies of the fields that declared classes is requesting.

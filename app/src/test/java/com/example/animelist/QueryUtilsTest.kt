@@ -15,10 +15,10 @@ class QueryUtilsTest {
     private lateinit var queryUtils: QueryUtils
 
     val animeListString =
-        File("src\\test\\java\\com\\example\\animelist\\ui\\testdata.txt").readText(Charsets.UTF_8)
+        File("src\\test\\java\\com\\example\\animelist\\testdata\\animeList.txt").readText(Charsets.UTF_8)
 
     val animeDetailString =
-        File("src\\test\\java\\com\\example\\animelist\\ui\\animeDetail.txt").readText(Charsets.UTF_8)
+        File("src\\test\\java\\com\\example\\animelist\\testdata\\animeDetail.txt").readText(Charsets.UTF_8)
 
     @Before
     fun setUp() {

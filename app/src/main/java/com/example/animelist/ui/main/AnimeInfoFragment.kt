@@ -69,6 +69,7 @@ class AnimeInfoFragment : Fragment() {
             .inflate(inflater, R.layout.fragment_animeinfo_list, container, false)
         val view = fragmentAnimeInfoListBinding.root
         fragmentAnimeInfoListBinding.viewmodel = viewModel
+        fragmentAnimeInfoListBinding.lifecycleOwner = this
 
         // Set the adapter
         if (view.anime_list is RecyclerView) {

@@ -21,7 +21,6 @@ import org.junit.Assert.*
 import org.junit.Rule
 
 import org.mockito.Mockito.`when`
-import java.io.File
 
 class AnimeViewModelTest {
 
@@ -57,8 +56,7 @@ class AnimeViewModelTest {
         runBlocking {
             val animeinfo1 = AnimeInfo("1", "1", "TV", "testAnime", "", "")
             val animeinfo2 = AnimeInfo("1", "1", "TV", "testAnime", "", "")
-            val string =
-                File("src\\test\\java\\com\\example\\animelist\\ui\\testdata.txt").readText(Charsets.UTF_8)
+            val string = "test"
             `when`(animeNetworkService.fetchAnimeList()).thenReturn(string)
             `when`(queryUtil.parseXmlToAnimeList(string)).thenReturn(listOf(animeinfo1, animeinfo2))
             viewmodel.animeListLiveData.observeForever(observer)

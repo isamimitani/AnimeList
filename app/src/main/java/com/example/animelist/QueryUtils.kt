@@ -15,17 +15,12 @@
  */
 package com.example.animelist
 
-import android.util.Log
 import android.util.Xml
 import com.example.animelist.entity.AnimeDetail
 import com.example.animelist.entity.AnimeInfo
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import java.io.*
-import java.net.HttpURLConnection
-import java.net.MalformedURLException
-import java.net.URL
-import java.nio.charset.Charset
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -42,118 +37,6 @@ class QueryUtils @Inject constructor() {
         // We don't use namespaces
         private val ns: String? = null
     }
-
-//    /**
-//     * Query the Anime News Network dataset and return a list of [AnimeInfo] objects.
-//     */
-//    fun fetchAnimeListData(requestUrl: String): List<AnimeInfo>? { // Create URL object
-//        val url = createUrl(requestUrl)
-//        // Perform HTTP request to the URL and receive a JSON response back
-//        var xmlResponse: String? = null
-//        try {
-//            xmlResponse = makeHttpRequest(url)
-//        } catch (e: IOException) {
-//            Log.e(LOG_TAG, "Problem making the HTTP request.", e)
-//        }
-//        // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
-//        // Return the list of {@link Earthquake}s
-//        //return extractFeatureFromXML(xmlResponse)
-//        return parseXmlToAnimeList(xmlResponse)
-//    }
-
-//    /**
-//     * Query the Anime News Network dataset and return a [AnimeDetail] objects.
-//     */
-//    fun fetchAnimeDetailData(requestUrl: String): AnimeDetail? { // Create URL object
-//        val url = createUrl(requestUrl)
-//        // Perform HTTP request to the URL and receive a JSON response back
-//        var xmlResponse: String? = null
-//        try {
-//            xmlResponse = makeHttpRequest(url)
-//        } catch (e: IOException) {
-//            Log.e(LOG_TAG, "Problem making the HTTP request.", e)
-//        }
-//        // Extract relevant fields from the JSON response and create a list of {@link Earthquake}s
-//        // Return the list of {@link Earthquake}s
-//        //return extractFeatureFromXML(xmlResponse)
-//        return parseXmlToAnimeDetail(xmlResponse)
-//    }
-//
-//    /**
-//     * Returns new URL object from the given string URL.
-//     */
-//    private fun createUrl(stringUrl: String): URL? {
-//        var url: URL? = null
-//        try {
-//            url = URL(stringUrl)
-//        } catch (e: MalformedURLException) {
-//            Log.e(LOG_TAG, "Problem building the URL ", e)
-//        }
-//        return url
-//    }
-//
-//    /**
-//     * Make an HTTP request to the given URL and return a String as the response.
-//     */
-//    @Throws(IOException::class)
-//    private fun makeHttpRequest(url: URL?): String {
-//        var xmlResponse = ""
-//        // If the URL is null, then return early.
-//        if (url == null) {
-//            return xmlResponse
-//        }
-//        var urlConnection: HttpURLConnection? = null
-//        var inputStream: InputStream? = null
-//        try {
-//            urlConnection = url.openConnection() as HttpURLConnection
-//            urlConnection.readTimeout = 10000
-//            urlConnection.connectTimeout = 15000
-//            urlConnection.requestMethod = "GET"
-//            urlConnection.connect()
-//            // If the request was successful (response code 200),
-//            // then read the input stream and parse the response.
-//            if (urlConnection.responseCode == 200) {
-//                inputStream = urlConnection.inputStream
-//                xmlResponse = readFromStream(inputStream)
-//                println(xmlResponse)
-//            } else {
-//                Log.e(
-//                    LOG_TAG,
-//                    "Error response code: " + urlConnection.responseCode
-//                )
-//            }
-//        } catch (e: IOException) {
-//            Log.e(
-//                LOG_TAG,
-//                "Problem retrieving the earthquake JSON results.",
-//                e
-//            )
-//        } finally {
-//            urlConnection?.disconnect()
-//            inputStream?.close()
-//        }
-//        return xmlResponse
-//    }
-//
-//    /**
-//     * Convert the [InputStream] into a String which contains the
-//     * whole JSON response from the server.
-//     */
-//    @Throws(IOException::class)
-//    private fun readFromStream(inputStream: InputStream?): String {
-//        val output = StringBuilder()
-//        if (inputStream != null) {
-//            val inputStreamReader =
-//                InputStreamReader(inputStream, Charset.forName("UTF-8"))
-//            val reader = BufferedReader(inputStreamReader)
-//            var line = reader.readLine()
-//            while (line != null) {
-//                output.append(line)
-//                line = reader.readLine()
-//            }
-//        }
-//        return output.toString()
-//    }
 
     @Throws(XmlPullParserException::class, IOException::class)
     fun parseXmlToAnimeList(xmlResponse: String?): List<AnimeInfo> {

@@ -12,6 +12,8 @@ import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
+enum class AnimeApiStatus { LOADING, ERROR, DONE }
+
 @Singleton
 class AnimeViewModel
 @Inject constructor(
@@ -32,6 +34,10 @@ class AnimeViewModel
     }
 
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
+    private val _status = MutableLiveData<AnimeApiStatus>()
+    val status: LiveData<AnimeApiStatus>
+        get() = _status
 
     private val _animeListLiveData: MutableLiveData<List<AnimeInfo>> by lazy {
         MutableLiveData<List<AnimeInfo>>().also {
@@ -87,9 +93,16 @@ class AnimeViewModel
     private fun loadAnimeList() {
         uiScope.launch {
             withContext(Dispatchers.IO) {
-                val result = animeNetworkService.fetchAnimeList()
-                animeList = queryUtils.parseXmlToAnimeList(result)
-                _animeListLiveData.postValue(animeList?.sortedBy { it.name })
+                try {
+                    _status.postValue(AnimeApiStatus.LOADING)
+                    val result = animeNetworkService.fetchAnimeList()
+                    animeList = queryUtils.parseXmlToAnimeList(result)
+                    _status.postValue(AnimeApiStatus.DONE)
+                    _animeListLiveData.postValue(animeList?.sortedBy { it.name })
+                } catch (e:Exception){
+                    _status.postValue(AnimeApiStatus.ERROR)
+                    _animeListLiveData.postValue(ArrayList())
+                }
             }
         }
     }
@@ -98,9 +111,15 @@ class AnimeViewModel
     fun loadAnimeDetail(animeId: String) {
         uiScope.launch {
             withContext(Dispatchers.IO) {
-                val result = animeNetworkService.fetchAnimeDetail(animeId)
-                val animeDetail = queryUtils.parseXmlToAnimeDetail(result)
-                _animeDetailLiveData.postValue(animeDetail)
+                try {
+                    _status.postValue(AnimeApiStatus.LOADING)
+                    val result = animeNetworkService.fetchAnimeDetail(animeId)
+                    val animeDetail = queryUtils.parseXmlToAnimeDetail(result)
+                    _status.postValue(AnimeApiStatus.DONE)
+                    _animeDetailLiveData.postValue(animeDetail)
+                } catch (e: Exception) {
+                    _status.postValue(AnimeApiStatus.ERROR)
+                }
             }
         }
     }
@@ -112,4 +131,5 @@ class AnimeViewModel
             }?.sortedBy { it.name })
         }
     }
+
 }

@@ -38,6 +38,7 @@ class AnimeInfoFragmentTest {
             )
         )
 
+        //Todo: change to wait for RecyclerView to appear
         Thread.sleep(7000)
         // Tests filter function
         onView(ViewMatchers.withId(R.id.editText)).perform(typeText("chihaya"), click())
